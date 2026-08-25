@@ -1,45 +1,40 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import './global.css';
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
+import { queryClient, asyncStoragePersister } from './src/api/queryClient';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { Text, View } from 'react-native';
 
-import { NewAppScreen } from '@react-native/new-app-screen';
-import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
-import {
-  SafeAreaProvider,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
-
-function App() {
-  const isDarkMode = useColorScheme() === 'dark';
-
+function TempScreen() {
   return (
-    <SafeAreaProvider>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <AppContent />
-    </SafeAreaProvider>
-  );
-}
-
-function AppContent() {
-  const safeAreaInsets = useSafeAreaInsets();
-
-  return (
-    <View style={styles.container}>
-      <NewAppScreen
-        templateFileName="App.tsx"
-        safeAreaInsets={safeAreaInsets}
-      />
+    <View className="flex-1 items-center justify-center bg-white dark:bg-slate-900">
+      <Text className="text-xl font-bold text-slate-900 dark:text-white">
+        SSC Mobile Dashboard
+      </Text>
+      <Text className="text-sm text-slate-500 dark:text-slate-400">
+        React Native + NativeWind + React Query
+      </Text>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
+function App(): React.JSX.Element {
+  return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaProvider>
+        <PersistQueryClientProvider
+          client={queryClient}
+          persistOptions={{ persister: asyncStoragePersister }}
+        >
+          <NavigationContainer>
+            <TempScreen />
+          </NavigationContainer>
+        </PersistQueryClientProvider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
+  );
+}
 
 export default App;
