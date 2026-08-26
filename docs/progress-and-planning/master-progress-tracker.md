@@ -13,10 +13,13 @@ This repository (`ssc-mobile`) is a high-performance React Native (CLI) applicat
 - **Phase 5: Store (Completed)** - Native gamification store & bottom sheet checkout flow.
 - **Phase 6: Infrastructure Upgrade (Completed)** - Upgraded NativeWind v4 → v5 (preview) for Tailwind CSS v4 compatibility. Migrated to CSS-first config (`global.css` with `@import` directives, removed `tailwind.config.js`), removed Babel plugin, added `postcss.config.mjs`.
 - **Phase 7: DX & Quality (Completed)** - Fixed all TypeScript errors (added `@tanstack/react-query-persist-client`, CSS module types). Installed `react-native-worklets@0.12.1` (Reanimated v4 peer dep). Set up Husky with `pre-commit` (lint-staged ESLint) and `pre-push` (full `tsc --noEmit`) hooks. Created setup & emulator runbook.
+- **Phase 8: Theming & Global UI Components (In Progress)** - Porting the full design system (OKLCH tokens, Inter/JetBrains fonts, UI components) from `ssc-client` to `ssc-mobile` using NativeWind v5.
 
 ## Current Context
 
 - **DX infrastructure complete.** Zero TypeScript errors. Husky pre-commit + pre-push gates active.
+- Porting Client Theme System (Tailwind v4 OKLCH tokens) and adding custom fonts (Inter, JetBrains Mono) natively to iOS/Android.
+- Building core UI component library (`Text`, `Button`, `Card`, `Badge`) in `src/components/ui`.
 - Android emulator build running (`Medium_Phone_API_36.0`).
 - iOS simulator requires **iOS 18.5 platform** installed via Xcode → Settings → Platforms.
 - See [`docs/architecture-and-infrastructure/2026-08-27-setup-and-emulators/setup-and-emulators.md`](../architecture-and-infrastructure/2026-08-27-setup-and-emulators/setup-and-emulators.md) for full setup runbook.

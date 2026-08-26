@@ -28,14 +28,13 @@
 	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
-	  <!-- Do not change NSAllowsArbitraryLoads to true, or you will risk app rejection! -->
 		<key>NSAllowsArbitraryLoads</key>
 		<false/>
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -55,5 +54,76 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Inter-Medium.ttf</string>
+		<string>InterDisplay-ExtraLightItalic.ttf</string>
+		<string>InterDisplay-Bold.ttf</string>
+		<string>JetBrainsMono-Thin.ttf</string>
+		<string>Inter-Light.ttf</string>
+		<string>JetBrainsMono-Bold.ttf</string>
+		<string>JetBrainsMono-Italic.ttf</string>
+		<string>JetBrainsMono-LightItalic.ttf</string>
+		<string>Inter-ExtraLightItalic.ttf</string>
+		<string>JetBrainsMono-Regular.ttf</string>
+		<string>InterDisplay-Thin.ttf</string>
+		<string>InterDisplay-Medium.ttf</string>
+		<string>JetBrainsMonoNL-ExtraLightItalic.ttf</string>
+		<string>Inter-SemiBoldItalic.ttf</string>
+		<string>Inter-Thin.ttf</string>
+		<string>InterDisplay-ExtraLight.ttf</string>
+		<string>Inter-Bold.ttf</string>
+		<string>InterDisplay-SemiBold.ttf</string>
+		<string>JetBrainsMono-ExtraLightItalic.ttf</string>
+		<string>JetBrainsMonoNL-ExtraLight.ttf</string>
+		<string>JetBrainsMonoNL-MediumItalic.ttf</string>
+		<string>JetBrainsMonoNL-ThinItalic.ttf</string>
+		<string>JetBrainsMonoNL-Light.ttf</string>
+		<string>InterDisplay-Light.ttf</string>
+		<string>JetBrainsMonoNL-Italic.ttf</string>
+		<string>InterDisplay-ThinItalic.ttf</string>
+		<string>JetBrainsMonoNL-BoldItalic.ttf</string>
+		<string>InterDisplay-BoldItalic.ttf</string>
+		<string>Inter-Regular.ttf</string>
+		<string>JetBrainsMonoNL-SemiBold.ttf</string>
+		<string>JetBrainsMono-SemiBoldItalic.ttf</string>
+		<string>JetBrainsMonoNL-LightItalic.ttf</string>
+		<string>InterDisplay-Black.ttf</string>
+		<string>JetBrainsMono-Light.ttf</string>
+		<string>InterDisplay-BlackItalic.ttf</string>
+		<string>JetBrainsMono-MediumItalic.ttf</string>
+		<string>JetBrainsMono-ExtraBold.ttf</string>
+		<string>JetBrainsMono-SemiBold.ttf</string>
+		<string>Inter-LightItalic.ttf</string>
+		<string>Inter-ExtraBold.ttf</string>
+		<string>Inter-ThinItalic.ttf</string>
+		<string>JetBrainsMonoNL-Regular.ttf</string>
+		<string>Inter-ExtraLight.ttf</string>
+		<string>Inter-BoldItalic.ttf</string>
+		<string>Inter-ExtraBoldItalic.ttf</string>
+		<string>JetBrainsMonoNL-Medium.ttf</string>
+		<string>InterDisplay-ExtraBold.ttf</string>
+		<string>JetBrainsMonoNL-Thin.ttf</string>
+		<string>Inter-MediumItalic.ttf</string>
+		<string>Inter-Black.ttf</string>
+		<string>JetBrainsMonoNL-SemiBoldItalic.ttf</string>
+		<string>JetBrainsMonoNL-ExtraBoldItalic.ttf</string>
+		<string>Inter-Italic.ttf</string>
+		<string>JetBrainsMono-ExtraBoldItalic.ttf</string>
+		<string>InterDisplay-MediumItalic.ttf</string>
+		<string>JetBrainsMono-ThinItalic.ttf</string>
+		<string>InterDisplay-Italic.ttf</string>
+		<string>InterDisplay-ExtraBoldItalic.ttf</string>
+		<string>JetBrainsMonoNL-ExtraBold.ttf</string>
+		<string>InterDisplay-LightItalic.ttf</string>
+		<string>JetBrainsMono-ExtraLight.ttf</string>
+		<string>Inter-BlackItalic.ttf</string>
+		<string>JetBrainsMono-Medium.ttf</string>
+		<string>Inter-SemiBold.ttf</string>
+		<string>JetBrainsMono-BoldItalic.ttf</string>
+		<string>InterDisplay-Regular.ttf</string>
+		<string>JetBrainsMonoNL-Bold.ttf</string>
+		<string>InterDisplay-SemiBoldItalic.ttf</string>
+	</array>
 </dict>
 </plist>

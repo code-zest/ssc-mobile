@@ -2,3 +2,210 @@
 @import 'tailwindcss/preflight.css' layer(base);
 @import 'tailwindcss/utilities.css';
 @import 'nativewind/theme';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'InterDisplay', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrainsMono', ui-monospace, monospace;
+
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
+  /* Test state tokens (client-specific) */
+  --color-correct: var(--correct);
+  --color-correct-foreground: var(--correct-foreground);
+  --color-incorrect: var(--incorrect);
+  --color-incorrect-foreground: var(--incorrect-foreground);
+  --color-streak: var(--streak);
+  --color-achievement: var(--achievement);
+
+  /* Subject Colors */
+  --color-subject-quant: var(--subject-quant);
+  --color-subject-english: var(--subject-english);
+  --color-subject-ga: var(--subject-ga);
+  --color-subject-reason: var(--subject-reason);
+  --color-subject-science: var(--subject-science);
+
+  /* Exam Colors */
+  --color-exam-cgl: var(--exam-cgl);
+  --color-exam-chsl: var(--exam-chsl);
+  --color-exam-mts: var(--exam-mts);
+  --color-exam-cpo: var(--exam-cpo);
+  --color-exam-gd: var(--exam-gd);
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+}
+
+@layer base {
+  :root {
+    /* ── Core surfaces ───────────────────────────────────────── */
+    --background: oklch(0.99 0.01 250);
+    --foreground: oklch(0.18 0.02 250);
+
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.18 0.02 250);
+
+    --popover: oklch(1 0 0);
+    --popover-foreground: oklch(0.18 0.02 250);
+
+    /* ── Brand primary: CodeZest Indigo ──────────────────────── */
+    --primary: oklch(0.55 0.22 275);
+    --primary-foreground: oklch(0.98 0.01 275);
+
+    /* ── Secondary ────────────────────────────────── */
+    --secondary: oklch(0.96 0.01 250);
+    --secondary-foreground: oklch(0.2 0.04 250);
+
+    /* ── Muted ───────────────────────────────────────────────── */
+    --muted: oklch(0.95 0.01 250);
+    --muted-foreground: oklch(0.53 0.02 250);
+
+    /* ── Accent ──────────────────────────────────────────────── */
+    --accent: oklch(0.94 0.04 250);
+    --accent-foreground: oklch(0.4 0.15 250);
+
+    /* ── Semantic status ─────────────────────────────────────── */
+    --destructive: oklch(0.55 0.2 26);
+    --destructive-foreground: oklch(1 0 0);
+
+    --success: oklch(0.6 0.15 145);
+    --success-foreground: oklch(1 0 0);
+
+    --warning: oklch(0.8 0.15 80);
+    --warning-foreground: oklch(0.25 0.05 80);
+
+    --info: oklch(0.6 0.18 250);
+    --info-foreground: oklch(1 0 0);
+
+    /* ── Borders / Inputs / Ring ─────────────────────────────── */
+    --border: oklch(0.93 0.005 250);
+    --input: oklch(0.85 0.01 250);
+    --ring: oklch(0.55 0.22 275);
+
+    --radius: 0.75rem;
+
+    /* ── Test state tokens ───────────────────────────────────── */
+    --correct: oklch(0.6 0.15 145);
+    --correct-foreground: oklch(1 0 0);
+    --incorrect: oklch(0.55 0.2 26);
+    --incorrect-foreground: oklch(1 0 0);
+    --streak: oklch(0.8 0.15 80);
+    --achievement: oklch(0.85 0.18 85);
+
+    /* ── Subject Colors (L=0.65, C=0.18) ─────────────────────── */
+    --subject-quant: oklch(0.65 0.18 45);
+    --subject-english: oklch(0.65 0.18 250);
+    --subject-ga: oklch(0.65 0.18 300);
+    --subject-reason: oklch(0.65 0.18 145);
+    --subject-science: oklch(0.65 0.18 190);
+
+    /* ── Exam Colors (L=0.65, C=0.18) ────────────────────────── */
+    --exam-cgl: oklch(0.65 0.18 275);
+    --exam-chsl: oklch(0.65 0.18 175);
+    --exam-mts: oklch(0.65 0.18 55);
+    --exam-cpo: oklch(0.65 0.18 310);
+    --exam-gd: oklch(0.65 0.18 350);
+  }
+
+  .dark {
+    /* ── Core surfaces ───────────────────────────────────────── */
+    --background: oklch(0.18 0.02 250);
+    --foreground: oklch(0.98 0.01 250);
+
+    --card: oklch(0.22 0.02 250);
+    --card-foreground: oklch(0.98 0.01 250);
+
+    --popover: oklch(0.2 0.02 250);
+    --popover-foreground: oklch(0.98 0.01 250);
+
+    /* ── Brand primary: CodeZest Indigo (lighter in dark) ─────── */
+    --primary: oklch(0.65 0.2 275);
+    --primary-foreground: oklch(0.98 0.01 275);
+
+    /* ── Secondary ───────────────────────────────────────────── */
+    --secondary: oklch(0.28 0.03 250);
+    --secondary-foreground: oklch(0.98 0.01 250);
+
+    /* ── Muted ───────────────────────────────────────────────── */
+    --muted: oklch(0.25 0.03 250);
+    --muted-foreground: oklch(0.65 0.02 250);
+
+    /* ── Accent ──────────────────────────────────────────────── */
+    --accent: oklch(0.28 0.04 250);
+    --accent-foreground: oklch(0.9 0.05 250);
+
+    /* ── Semantic status ─────────────────────────────────────── */
+    --destructive: oklch(0.5 0.16 26);
+    --destructive-foreground: oklch(0.98 0.01 250);
+
+    --success: oklch(0.55 0.12 145);
+    --success-foreground: oklch(0.98 0.01 250);
+
+    --warning: oklch(0.7 0.14 80);
+    --warning-foreground: oklch(0.2 0.05 80);
+
+    --info: oklch(0.65 0.2 250);
+    --info-foreground: oklch(0.98 0.01 250);
+
+    /* ── Borders / Inputs / Ring ─────────────────────────────── */
+    --border: oklch(0.28 0.02 250);
+    --input: oklch(0.35 0.02 250);
+    --ring: oklch(0.65 0.2 275);
+
+    /* ── Test state tokens ───────────────────────────────────── */
+    --correct: oklch(0.55 0.12 145);
+    --correct-foreground: oklch(0.98 0.01 250);
+    --incorrect: oklch(0.5 0.16 26);
+    --incorrect-foreground: oklch(0.98 0.01 250);
+    --streak: oklch(0.7 0.14 80);
+    --achievement: oklch(0.75 0.18 85);
+
+    /* ── Subject Colors (Slightly adjusted L for dark mode) ──── */
+    --subject-quant: oklch(0.6 0.18 45);
+    --subject-english: oklch(0.6 0.18 250);
+    --subject-ga: oklch(0.6 0.18 300);
+    --subject-reason: oklch(0.6 0.18 145);
+    --subject-science: oklch(0.6 0.18 190);
+
+    /* ── Exam Colors (Slightly adjusted L for dark mode) ─────── */
+    --exam-cgl: oklch(0.6 0.18 275);
+    --exam-chsl: oklch(0.6 0.18 175);
+    --exam-mts: oklch(0.6 0.18 55);
+    --exam-cpo: oklch(0.6 0.18 310);
+    --exam-gd: oklch(0.6 0.18 350);
+  }
+}

@@ -1,48 +1,86 @@
 import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import { useAuthStore } from '../../store/useAuthStore';
+import { Text } from '../../components/ui/Text';
+import { Button } from '../../components/ui/Button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/Card';
+import { Badge } from '../../components/ui/Badge';
 
 export function DashboardScreen({ navigation }: any) {
   const { user, logout } = useAuthStore();
 
   return (
-    <ScrollView className="flex-1 bg-slate-50 dark:bg-slate-900 p-4">
+    <ScrollView className="flex-1 bg-background p-4">
       <View className="mb-6 flex-row justify-between items-center mt-8">
         <View>
-          <Text className="text-slate-500 dark:text-slate-400 font-medium text-sm">Welcome back,</Text>
-          <Text className="text-2xl font-bold text-slate-900 dark:text-white">{user?.firstName}</Text>
+          <Text className="text-muted-foreground text-sm">Welcome back,</Text>
+          <Text variant="display" weight="bold" className="text-2xl">{user?.firstName || 'Student'}</Text>
         </View>
-        <TouchableOpacity onPress={logout} className="bg-slate-200 dark:bg-slate-800 px-4 py-2 rounded-full">
-          <Text className="text-slate-700 dark:text-slate-300 font-semibold text-sm">Log Out</Text>
-        </TouchableOpacity>
+        <Button variant="outline" size="sm" onPress={logout} title="Log Out" />
       </View>
 
-      <View className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-slate-700 mb-6">
-        <Text className="text-lg font-bold text-slate-900 dark:text-white mb-2">Today's Goal</Text>
-        <Text className="text-slate-500 dark:text-slate-400 mb-4">You have 2 lessons left to complete your daily streak.</Text>
-        <View className="h-2 w-full bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
-          <View className="h-full bg-blue-600 w-1/3 rounded-full" />
-        </View>
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle>Today's Goal</CardTitle>
+          <CardDescription>You have 2 lessons left to complete your daily streak.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <View className="h-3 w-full bg-secondary rounded-full overflow-hidden">
+            <View className="h-full bg-primary w-1/3 rounded-full" />
+          </View>
+        </CardContent>
+      </Card>
+
+      <View className="flex-row justify-between items-center mb-4">
+        <Text variant="display" weight="bold" className="text-xl">Recent Subjects</Text>
+        <Button variant="ghost" size="sm" onPress={() => navigation.navigate('Learn')}>
+          <Text className="text-primary font-semibold">View All</Text>
+        </Button>
       </View>
 
-      <View className="flex-row justify-between mb-4">
-        <Text className="text-xl font-bold text-slate-900 dark:text-white">Recent Subjects</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Learn')}>
-          <Text className="text-blue-600 font-semibold">View All</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View className="flex-row space-x-4 mb-6">
-        {/* Placeholder cards */}
-        <View className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-slate-700 w-40">
-          <View className="h-10 w-10 bg-indigo-100 dark:bg-indigo-900/30 rounded-xl mb-3" />
-          <Text className="font-bold text-slate-900 dark:text-white mb-1">Mathematics</Text>
-          <Text className="text-xs text-slate-500 dark:text-slate-400">4 Chapters left</Text>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} className="mb-6">
+        <View className="flex-row gap-4">
+          <Card className="w-48 p-4">
+            <View className="flex-row justify-between mb-3">
+              <View className="h-10 w-10 bg-subject-quant/10 rounded-xl items-center justify-center">
+                <Text className="text-xl">➗</Text>
+              </View>
+              <Badge variant="quant" label="Quant" />
+            </View>
+            <Text weight="bold" className="mb-1">Mathematics</Text>
+            <Text className="text-xs text-muted-foreground">4 Chapters left</Text>
+          </Card>
+          
+          <Card className="w-48 p-4">
+            <View className="flex-row justify-between mb-3">
+              <View className="h-10 w-10 bg-subject-reason/10 rounded-xl items-center justify-center">
+                <Text className="text-xl">🧠</Text>
+              </View>
+              <Badge variant="reason" label="Reasoning" />
+            </View>
+            <Text weight="bold" className="mb-1">Logical Reasoning</Text>
+            <Text className="text-xs text-muted-foreground">1 Chapter left</Text>
+          </Card>
+          
+          <Card className="w-48 p-4">
+            <View className="flex-row justify-between mb-3">
+              <View className="h-10 w-10 bg-subject-english/10 rounded-xl items-center justify-center">
+                <Text className="text-xl">📝</Text>
+              </View>
+              <Badge variant="english" label="English" />
+            </View>
+            <Text weight="bold" className="mb-1">English Comp.</Text>
+            <Text className="text-xs text-muted-foreground">Completed</Text>
+          </Card>
         </View>
-        <View className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-slate-700 w-40">
-          <View className="h-10 w-10 bg-emerald-100 dark:bg-emerald-900/30 rounded-xl mb-3" />
-          <Text className="font-bold text-slate-900 dark:text-white mb-1">Reasoning</Text>
-          <Text className="text-xs text-slate-500 dark:text-slate-400">1 Chapter left</Text>
+      </ScrollView>
+      
+      <View className="mb-8">
+        <Text variant="display" weight="bold" className="text-xl mb-4">Current Exams</Text>
+        <View className="flex-row flex-wrap gap-2">
+          <Badge variant="cgl" label="SSC CGL 2026" />
+          <Badge variant="chsl" label="SSC CHSL" />
+          <Badge variant="mts" label="SSC MTS" />
         </View>
       </View>
 
