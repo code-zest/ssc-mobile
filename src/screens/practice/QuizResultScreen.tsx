@@ -1,7 +1,11 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, SafeAreaView } from 'react-native';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import type { PracticeParamList } from './QuizEngineScreen';
 
-export function QuizResultScreen({ route, navigation }: any) {
+type QuizResultScreenProps = NativeStackScreenProps<PracticeParamList, 'QuizResult'>;
+
+export function QuizResultScreen({ navigation }: QuizResultScreenProps) {
   // In a real implementation, we would send the answers to the API to calculate the score
   // and then render the result here.
   

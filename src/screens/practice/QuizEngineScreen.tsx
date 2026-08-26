@@ -1,9 +1,23 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, SafeAreaView, Alert } from 'react-native';
 import { useQuery } from '@tanstack/react-query';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { apiClient } from '../../api/apiClient';
 
-export function QuizEngineScreen({ route, navigation }: any) {
+export type PracticeParamList = {
+  PracticeList: undefined;
+  QuizEngine: { setId: string; title: string };
+  QuizResult: { setId: string; title: string; answers: Record<string, string> };
+};
+
+type QuizScreenProps = NativeStackScreenProps<PracticeParamList, 'QuizEngine'>;
+
+interface QuizOption {
+  id: string;
+  text: string;
+}
+
+export function QuizEngineScreen({ route, navigation }: QuizScreenProps) {
   const { setId, title } = route.params;
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -39,7 +53,7 @@ export function QuizEngineScreen({ route, navigation }: any) {
         'Are you sure you want to submit your answers?',
         [
           { text: 'Cancel', style: 'cancel' },
-          { text: 'Submit', style: 'destructive', onPress: () => navigation.replace('QuizResult', { setId, answers }) }
+          { text: 'Submit', style: 'destructive', onPress: () => navigation.replace('QuizResult', { setId, title, answers }) }
         ]
       );
     }
@@ -80,7 +94,7 @@ export function QuizEngineScreen({ route, navigation }: any) {
         </Text>
 
         <View className="space-y-3">
-          {currentQuestion.options?.map((option: any, index: number) => {
+          {currentQuestion.options?.map((option: QuizOption) => {
             const isSelected = answers[currentQuestion.id] === option.id;
             return (
               <TouchableOpacity
