@@ -7,6 +7,18 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { RootNavigator } from './src/navigation/RootNavigator';
 
+const linking = {
+  prefixes: ['ssc://', 'https://ssc.com'],
+  config: {
+    screens: {
+      Home: 'home',
+      Learn: 'learn/:subjectId',
+      Practice: 'practice',
+      Store: 'store',
+    },
+  },
+};
+
 function App(): React.JSX.Element {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -15,7 +27,7 @@ function App(): React.JSX.Element {
           client={queryClient}
           persistOptions={{ persister: asyncStoragePersister }}
         >
-          <NavigationContainer>
+          <NavigationContainer linking={linking}>
             <RootNavigator />
           </NavigationContainer>
         </PersistQueryClientProvider>

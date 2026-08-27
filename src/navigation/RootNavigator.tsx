@@ -5,8 +5,10 @@ import { AuthNavigator } from './AuthNavigator';
 import { MainTabNavigator } from './MainTabNavigator';
 import * as Keychain from 'react-native-keychain';
 
+import { apiClient } from '../api/apiClient';
+
 export function RootNavigator() {
-  const { isAuthenticated, setCredentials } = useAuthStore();
+  const { isAuthenticated, setCredentials, logout } = useAuthStore();
   const [isReady, setIsReady] = React.useState(false);
 
   useEffect(() => {
@@ -14,26 +16,26 @@ export function RootNavigator() {
       try {
         const credentials = await Keychain.getGenericPassword();
         if (credentials && credentials.password) {
-          // Stub user until /me endpoint
-          const user = {
-            id: '1',
-            email: 'student@example.com',
-            firstName: 'Student',
-            lastName: '',
-            role: 'STUDENT',
-            isOnboarded: true,
-          } as any;
-          await setCredentials(user, credentials.password);
+          try {
+            const { data } = await apiClient.get('/auth/me');
+            await setCredentials(data.user || data, credentials.password);
+          } catch (apiError) {
+            console.error('Failed to validate token with API:', apiError);
+            logout();
+          }
+        } else {
+          logout();
         }
       } catch (e) {
-        console.error('Failed to restore token:', e);
+        console.error('Failed to restore token from Keychain:', e);
+        logout();
       } finally {
         setIsReady(true);
       }
     };
 
     bootstrapAsync();
-  }, [setCredentials]);
+  }, [setCredentials, logout]);
 
   if (!isReady) {
     return (
