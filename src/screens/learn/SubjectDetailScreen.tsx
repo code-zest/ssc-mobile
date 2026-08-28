@@ -30,7 +30,7 @@ export function SubjectDetailScreen({ route, navigation }: any) {
       <FlatList
         data={chapters || []}
         keyExtractor={(item: any) => item.id}
-        contentContainerStyle={{ padding: 16, gap: 12 }}
+        contentContainerClassName="p-4 gap-3"
         renderItem={({ item, index }) => (
           <View className="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-100 dark:border-slate-700">
             <Text className="text-sm font-semibold text-blue-600 mb-1">CHAPTER {index + 1}</Text>

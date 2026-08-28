@@ -23,6 +23,7 @@ export function MainTabNavigator() {
       },
       tabBarActiveTintColor: 'oklch(0.55 0.22 275)', // primary
       tabBarInactiveTintColor: 'oklch(0.53 0.02 250)', // muted-foreground
+      // eslint-disable-next-line react/no-unstable-nested-components
       tabBarIcon: ({ focused, color }) => {
         let IconComponent;
         

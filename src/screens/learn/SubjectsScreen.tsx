@@ -26,7 +26,7 @@ export function SubjectsScreen({ navigation }: any) {
       <FlatList
         data={subjects}
         keyExtractor={(item: any) => item.id}
-        contentContainerStyle={{ padding: 16, gap: 16 }}
+        contentContainerClassName="p-4 gap-4"
         renderItem={({ item }) => (
           <TouchableOpacity 
             onPress={() => navigation.navigate('SubjectDetail', { subjectId: item.id, title: item.title })}

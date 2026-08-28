@@ -16,7 +16,7 @@ export function DashboardScreen({ navigation }: any) {
           <Text className="text-muted-foreground text-sm">Welcome back,</Text>
           <Text variant="display" weight="bold" className="text-2xl">{user?.firstName || 'Student'}</Text>
         </View>
-        <Button variant="outline" size="sm" onPress={logout} title="Log Out" />
+        <Button variant="outline" size="sm" onPress={logout} label="Log Out" />
       </View>
 
       <Card className="mb-6">

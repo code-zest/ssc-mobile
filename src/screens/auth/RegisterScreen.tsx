@@ -1,35 +1,53 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ActivityIndicator, Alert, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { View, Text, Alert } from 'react-native';
+import { useForm, Controller } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
 import { apiClient } from '../../api/apiClient';
+import { Input } from '../../components/ui/Input';
+import { Button } from '../../components/ui/Button';
+import { Screen } from '../../components/layout/Screen';
+import { FloatingCard } from '../../components/layout/FloatingCard';
+
+import Animated, { FadeInDown } from 'react-native-reanimated';
+
+const registerSchema = z.object({
+  firstName: z.string().min(2, 'First name is too short'),
+  lastName: z.string().min(2, 'Last name is too short'),
+  email: z.string().email('Please enter a valid email address'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
+});
+
+type RegisterFormValues = z.infer<typeof registerSchema>;
 
 export function RegisterScreen({ navigation }: any) {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleRegister = async () => {
-    if (!firstName || !lastName || !email || !password) {
-      Alert.alert('Error', 'Please fill in all fields.');
-      return;
+  const { control, handleSubmit, formState: { errors } } = useForm<RegisterFormValues>({
+    resolver: zodResolver(registerSchema),
+    defaultValues: {
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
     }
+  });
 
+  const onSubmit = async (data: RegisterFormValues) => {
     try {
       setLoading(true);
       await apiClient.post('/auth/register', {
-        firstName: firstName.trim(),
-        lastName: lastName.trim(),
-        email: email.trim(),
-        password,
+        firstName: data.firstName.trim(),
+        lastName: data.lastName.trim(),
+        email: data.email.trim(),
+        password: data.password,
       });
 
       Alert.alert(
-        'Success',
-        'Registration successful! Please check your email for the verification code.',
+        'Success', 
+        'Account created successfully. Please login.',
         [{ text: 'OK', onPress: () => navigation.navigate('Login') }]
       );
-      
     } catch (error: any) {
       Alert.alert(
         'Registration Failed',
@@ -41,89 +59,111 @@ export function RegisterScreen({ navigation }: any) {
   };
 
   return (
-    <KeyboardAvoidingView 
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      className="flex-1 bg-white dark:bg-slate-900"
-    >
-      <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', padding: 24 }}>
-        <View className="mb-8 items-center">
-          <Text className="text-3xl font-bold text-slate-900 dark:text-white mb-2">Create Account</Text>
-          <Text className="text-slate-500 dark:text-slate-400 text-center">
-            Join thousands of students cracking the SSC exams with Code Zest Academy.
-          </Text>
-        </View>
+    <Screen scrollable safeAreaTop>
+      <Animated.View 
+        entering={FadeInDown.duration(500).springify().damping(18)}
+        className="px-6 pt-8 pb-4"
+      >
+        <Text className="text-4xl font-bold text-foreground leading-tight tracking-tighter">
+          Start your{'\n'}journey,{'\n'}
+          <Text className="text-primary">aspirant.</Text>
+        </Text>
+        <Text className="text-base text-muted-foreground mt-3 leading-normal">
+          Join 1,240 others building their{'\n'}streak today.
+        </Text>
+      </Animated.View>
 
-        <View className="space-y-4 mb-6">
-          <View className="flex-row space-x-4">
+      <View className="flex-1 justify-end px-4 pb-8 pt-4">
+        <FloatingCard delay={100}>
+          <View className="flex-row space-x-3">
             <View className="flex-1">
-              <Text className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">First Name</Text>
-              <TextInput
-                className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white"
-                placeholder="John"
-                placeholderTextColor="#94a3b8"
-                value={firstName}
-                onChangeText={setFirstName}
+              <Controller
+                control={control}
+                name="firstName"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <Input
+                    label="First Name"
+                    autoCapitalize="words"
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                    error={errors.firstName?.message}
+                  />
+                )}
               />
             </View>
-            <View className="w-4" />
             <View className="flex-1">
-              <Text className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Last Name</Text>
-              <TextInput
-                className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white"
-                placeholder="Doe"
-                placeholderTextColor="#94a3b8"
-                value={lastName}
-                onChangeText={setLastName}
+              <Controller
+                control={control}
+                name="lastName"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <Input
+                    label="Last Name"
+                    autoCapitalize="words"
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                    error={errors.lastName?.message}
+                  />
+                )}
               />
             </View>
           </View>
 
-          <View>
-            <Text className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Email</Text>
-            <TextInput
-              className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white"
-              placeholder="Enter your email"
-              placeholderTextColor="#94a3b8"
-              keyboardType="email-address"
-              autoCapitalize="none"
-              value={email}
-              onChangeText={setEmail}
+          <Controller
+            control={control}
+            name="email"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <Input
+                label="Email"
+                keyboardType="email-address"
+                autoCapitalize="none"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                error={errors.email?.message}
+              />
+            )}
+          />
+
+          <Controller
+            control={control}
+            name="password"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <Input
+                label="Password"
+                secureTextEntry
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                error={errors.password?.message}
+              />
+            )}
+          />
+
+          <View className="mt-2">
+            <Button 
+              label="Create Account" 
+              onPress={() => handleSubmit(onSubmit)()} 
+              loading={loading}
+              consequential={true}
+              size="lg"
             />
           </View>
 
-          <View>
-            <Text className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Password</Text>
-            <TextInput
-              className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white"
-              placeholder="Create a password"
-              placeholderTextColor="#94a3b8"
-              secureTextEntry
-              value={password}
-              onChangeText={setPassword}
+          <View className="flex-row justify-center mt-6 items-center">
+            <Text className="text-muted-foreground text-sm">Already have an account? </Text>
+            <Button 
+              label="Sign in" 
+              variant="ghost" 
+              size="sm"
+              onPress={() => navigation.navigate('Login')}
+              className="px-0 py-0 h-auto"
+              textClassName="font-semibold text-sm"
             />
           </View>
-        </View>
-
-        <TouchableOpacity 
-          className="w-full bg-blue-600 rounded-xl py-4 items-center justify-center flex-row mb-6"
-          onPress={handleRegister}
-          disabled={loading}
-        >
-          {loading ? (
-            <ActivityIndicator color="white" className="mr-2" />
-          ) : null}
-          <Text className="text-white font-semibold text-lg">
-            {loading ? 'Creating Account...' : 'Sign Up'}
-          </Text>
-        </TouchableOpacity>
-
-        <View className="flex-row justify-center">
-          <Text className="text-slate-500 dark:text-slate-400">Already have an account? </Text>
-          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-            <Text className="text-blue-600 font-semibold">Sign In</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+        </FloatingCard>
+      </View>
+    </Screen>
   );
 }

@@ -25,7 +25,7 @@ export function PracticeListScreen({ navigation }: any) {
       <FlatList
         data={practiceSets}
         keyExtractor={(item: any) => item.id}
-        contentContainerStyle={{ padding: 16, gap: 16 }}
+        contentContainerClassName="p-4 gap-4"
         ListEmptyComponent={<Text className="text-slate-500 text-center mt-10">No practice sets available right now.</Text>}
         renderItem={({ item }) => (
           <TouchableOpacity 

@@ -1,95 +1,136 @@
 import React from 'react';
-import { TouchableOpacity, TouchableOpacityProps, View } from 'react-native';
-import { cva, type VariantProps } from 'class-variance-authority';
-import { cn } from '../../utils/cn';
-import { Text } from './Text';
+import { Pressable, Text, ActivityIndicator, PressableProps } from 'react-native';
+import Animated, { 
+  useAnimatedStyle, 
+  useSharedValue, 
+  withSpring, 
+  useReducedMotion 
+} from 'react-native-reanimated';
+import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 
-const buttonVariants = cva(
-  'flex flex-row items-center justify-center rounded-xl min-h-[48px] px-4 py-3 transition-colors',
-  {
-    variants: {
-      variant: {
-        default: 'bg-primary border border-primary',
-        secondary: 'bg-secondary border border-secondary',
-        outline: 'border-2 border-border bg-card',
-        ghost: 'bg-transparent',
-        destructive: 'bg-destructive border border-destructive',
-      },
-      size: {
-        default: 'min-h-[48px]',
-        sm: 'min-h-[44px] px-3 py-2 rounded-lg',
-        lg: 'min-h-[56px] px-6 py-4 rounded-2xl',
-        icon: 'min-h-[48px] w-12',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-      size: 'default',
-    },
-  }
-);
-
-const textVariants = cva('font-semibold text-center', {
-  variants: {
-    variant: {
-      default: 'text-primary-foreground',
-      secondary: 'text-secondary-foreground',
-      outline: 'text-foreground',
-      ghost: 'text-foreground',
-      destructive: 'text-destructive-foreground',
-    },
-    size: {
-      default: 'text-base',
-      sm: 'text-sm',
-      lg: 'text-lg',
-      icon: 'text-base',
-    },
-  },
-  defaultVariants: {
-    variant: 'default',
-    size: 'default',
-  },
-});
-
-export interface ButtonProps
-  extends TouchableOpacityProps,
-    VariantProps<typeof buttonVariants> {
-  title?: string;
+export interface ButtonProps extends Omit<PressableProps, 'style' | 'children'> {
+  label?: string;
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
+  size?: 'sm' | 'md' | 'lg';
+  loading?: boolean;
+  consequential?: boolean;
   children?: React.ReactNode;
+  className?: string;
+  textClassName?: string;
 }
 
-const Button = React.forwardRef<View, ButtonProps>(
-  (
-    {
-      className,
-      variant,
-      size,
-      title,
-      disabled,
-      children,
-      activeOpacity = 0.8,
-      ...props
-    },
-    ref
-  ) => {
-    return (
-      <TouchableOpacity
-        ref={ref as any}
-        className={cn(buttonVariants({ variant, size, className }), disabled && 'opacity-50')}
-        disabled={disabled}
-        activeOpacity={activeOpacity}
+export function Button({ 
+  label, 
+  variant = 'primary', 
+  size = 'md',
+  loading = false, 
+  consequential = false,
+  className = '', 
+  textClassName = '',
+  disabled, 
+  children,
+  onPress,
+  ...props 
+}: ButtonProps) {
+  
+  const reducedMotion = useReducedMotion();
+  const scale = useSharedValue(1);
+  const style = useAnimatedStyle(() => ({ 
+    transform: [{ scale: scale.value }] 
+  }));
+
+  const pressIn = () => { 
+    if (!reducedMotion && !disabled && !loading) {
+      scale.value = withSpring(0.96); 
+    }
+  };
+  
+  const pressOut = () => { 
+    if (!reducedMotion) {
+      scale.value = withSpring(1); 
+    }
+  };
+
+  const handlePress = (e: any) => {
+    if (disabled || loading) return;
+    
+    if (consequential) {
+      ReactNativeHapticFeedback.trigger("impactLight", {
+        enableVibrateFallback: true,
+        ignoreAndroidSystemSettings: false,
+      });
+    }
+    
+    if (onPress) {
+      onPress(e);
+    }
+  };
+
+  const getContainerClass = () => {
+    let base = "items-center justify-center flex-row min-h-[44px]";
+    
+    // Size variants
+    if (size === 'sm') base += " h-10 px-4 rounded-lg";
+    else if (size === 'lg') base += " h-14 px-6 rounded-2xl";
+    else base += " h-12 px-5 rounded-xl";
+
+    if (disabled || loading) {
+      base += " opacity-50";
+    }
+
+    // Color variants
+    switch (variant) {
+      case 'primary': return `${base} bg-primary`;
+      case 'secondary': return `${base} bg-secondary`;
+      case 'outline': return `${base} border border-border bg-transparent`;
+      case 'ghost': return `${base} bg-transparent py-2`;
+      default: return `${base} bg-primary`;
+    }
+  };
+
+  const getTextClass = () => {
+    let base = "font-sans font-semibold";
+    
+    if (size === 'sm') base += " text-sm";
+    else if (size === 'lg') base += " text-lg";
+    else base += " text-base";
+
+    switch (variant) {
+      case 'primary': return `${base} text-primary-foreground ${textClassName}`.trim();
+      case 'secondary': return `${base} text-secondary-foreground ${textClassName}`.trim();
+      case 'outline': return `${base} text-foreground ${textClassName}`.trim();
+      case 'ghost': return `${base} text-primary ${textClassName}`.trim();
+      default: return `${base} text-primary-foreground ${textClassName}`.trim();
+    }
+  };
+
+  const getSpinnerColor = () => {
+    switch (variant) {
+      case 'primary': return "white";
+      case 'secondary': return "white";
+      default: return "black";
+    }
+  };
+
+  return (
+    <Animated.View style={style} className={className}>
+      <Pressable
+        onPressIn={pressIn}
+        onPressOut={pressOut}
+        onPress={handlePress}
+        disabled={disabled || loading}
+        className={getContainerClass()}
         {...props}
       >
-        {title ? (
-          <Text className={cn(textVariants({ variant, size }))}>{title}</Text>
-        ) : (
-          children
+        {loading ? (
+          <ActivityIndicator color={getSpinnerColor()} className="mr-2" />
+        ) : null}
+        {children ? children : (
+          <Text className={getTextClass()}>
+            {label}
+          </Text>
         )}
-      </TouchableOpacity>
-    );
-  }
-);
-
-Button.displayName = 'Button';
-
-export { Button, buttonVariants };
+      </Pressable>
+    </Animated.View>
+  );
+}

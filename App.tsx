@@ -1,5 +1,6 @@
 import './global.css';
 import React from 'react';
+import { View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import { queryClient, asyncStoragePersister } from './src/api/queryClient';
@@ -21,18 +22,20 @@ const linking = {
 
 function App(): React.JSX.Element {
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <SafeAreaProvider>
-        <PersistQueryClientProvider
-          client={queryClient}
-          persistOptions={{ persister: asyncStoragePersister }}
-        >
-          <NavigationContainer linking={linking}>
-            <RootNavigator />
-          </NavigationContainer>
-        </PersistQueryClientProvider>
-      </SafeAreaProvider>
-    </GestureHandlerRootView>
+    <View className="flex-1 bg-background">
+      <GestureHandlerRootView className="flex-1">
+        <SafeAreaProvider>
+          <PersistQueryClientProvider
+            client={queryClient}
+            persistOptions={{ persister: asyncStoragePersister }}
+          >
+            <NavigationContainer linking={linking}>
+              <RootNavigator />
+            </NavigationContainer>
+          </PersistQueryClientProvider>
+        </SafeAreaProvider>
+      </GestureHandlerRootView>
+    </View>
   );
 }
 

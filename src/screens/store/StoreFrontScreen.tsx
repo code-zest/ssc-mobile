@@ -22,8 +22,7 @@ export function StoreFrontScreen({ navigation }: any) {
     return (
       <TouchableOpacity 
         onPress={() => navigation.navigate('Checkout', { item })}
-        className={`bg-white dark:bg-slate-800 rounded-3xl p-5 border border-slate-100 dark:border-slate-700 m-2 ${isLarge ? 'w-[90%]' : 'w-[43%]'}`}
-        style={{ flexGrow: 1 }}
+        className={`bg-white dark:bg-slate-800 rounded-3xl p-5 border border-slate-100 dark:border-slate-700 m-2 flex-grow ${isLarge ? 'w-[90%]' : 'w-[43%]'}`}
       >
         <View className="h-24 bg-slate-100 dark:bg-slate-700 rounded-2xl mb-4 items-center justify-center overflow-hidden">
           {item.imageUrl ? (
@@ -55,7 +54,7 @@ export function StoreFrontScreen({ navigation }: any) {
         data={storeItems || []}
         numColumns={2}
         keyExtractor={(item: any) => item.id}
-        contentContainerStyle={{ paddingHorizontal: 8, paddingBottom: 24 }}
+        contentContainerClassName="px-2 pb-6"
         renderItem={renderStoreItem}
       />
     </View>
