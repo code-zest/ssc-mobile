@@ -4,17 +4,40 @@
 
 This repository (`ssc-mobile`) is a high-performance React Native (CLI) application that serves as the mobile equivalent to the `ssc-client` web application. It consumes the `ssc-api` backend.
 
-## Roadmap
+## Roadmap & Phase Governance
 
-- **Phase 1: Foundation (Completed)** - Scaffolded React Native CLI, configured NativeWind, React Navigation, React Query, Reanimated, FlashList, Axios interceptors.
-- **Phase 2: Auth (Completed)** - JWT, secure storage (react-native-keychain), Zustand auth store, Login & Registration UI.
-- **Phase 3: Dashboard (Completed)** - Consuming subjects and chapters APIs.
-- **Phase 4: Practice Engine (Completed)** - Native quiz UI, Mock tests list.
-- **Phase 5: Store (Completed)** - Native gamification store & bottom sheet checkout flow.
-- **Phase 6: Infrastructure Upgrade (Completed)** - Upgraded NativeWind v4 → v5 (preview) for Tailwind CSS v4 compatibility. Migrated to CSS-first config (`global.css` with `@import` directives, removed `tailwind.config.js`), removed Babel plugin, added `postcss.config.mjs`.
-- **Phase 7: DX & Quality (Completed)** - Fixed all TypeScript errors (added `@tanstack/react-query-persist-client`, CSS module types). Installed `react-native-worklets@0.12.1` (Reanimated v4 peer dep). Set up Husky with `pre-commit` (lint-staged ESLint) and `pre-push` (full `tsc --noEmit`) hooks. Created setup & emulator runbook.
-- **Phase 8: Theming & Global UI Components (Completed)** - Ported the full design system (OKLCH tokens, Inter/JetBrains fonts, UI components) from `ssc-client` to `ssc-mobile` using NativeWind v5. Refactored Dashboard screen to showcase global components.
-- **Phase 9: Navigation & Routing (Completed)** - Configured `ssc://` deep linking in Android/iOS native files and React Navigation. Integrated `lucide-react-native` icons and OKLCH color tokens into the Bottom Tab Navigator. Upgraded `RootNavigator` to fetch the auth token from Keychain and bootstrap via `/auth/me` on startup.
+Every phase must adhere to the following governance model before being marked as "Completed":
+
+- **Owner:** CVS CHARAN (Lead)
+- **Exit Criteria:** Specific conditions that must be met (e.g., "zero TS errors", "passes a11y audit").
+- **Cross-Platform Consistency:** Must render identically (or within platform bounds) on iOS and Android.
+- **Metrics:** Measurable success (e.g., "bundle size < 15MB", "100% component token coverage").
+- **Risk Indicators:** Potential blockers identified during the phase.
+
+### Phase 1–9: Initial Port & Setup (Completed)
+
+_See git history for detailed completion records of Foundation, Auth, Dashboard, Practice Engine, Store, Infrastructure Upgrade, DX & Quality, Theming, and Navigation._
+
+### Phase 10: Testing Runbook (Completed)
+
+- **Goal:** Establish a robust testing strategy for mobile.
+- **Exit Criteria:** Jest configured for unit tests; Detox configured for E2E testing of the main auth flow.
+- **Metrics:** Unit testing configured with React Native Testing Library v14; E2E infrastructure scaffolded.
+- **Risks:** Detox environment setup complexity on CI.
+
+### Phase 11: CI/CD Pipeline & Automated Releases (Planned)
+
+- **Goal:** Fully automate releases using GitHub Actions and Fastlane.
+- **Exit Criteria:** PRs automatically run tests and linting. Fastlane builds and pushes to TestFlight and Google Play Internal.
+- **Metrics:** 0 manual steps required for a beta release.
+- **Risks:** iOS Certificate management (match) synchronization.
+
+### Phase 12: Performance & Production Readiness (Planned)
+
+- **Goal:** Ensure the app is optimized for low-end Android devices and network conditions.
+- **Exit Criteria:** Implement performance budgets (animations < 600ms), lazy loading for heavy screens.
+- **Metrics:** App load time < 2s on mid-range Android.
+- **Risks:** React Native re-renders in the practice engine causing dropped frames.
 
 ## Current Context
 

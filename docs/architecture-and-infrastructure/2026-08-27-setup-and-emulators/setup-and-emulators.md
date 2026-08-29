@@ -222,3 +222,66 @@ git push --no-verify
 | Lint        | `npm run lint`       | ESLint on all source files                 |
 | Type Check  | `npm run type-check` | TypeScript type check (no emit)            |
 | Test        | `npm test`           | Run Jest unit tests                        |
+
+---
+
+## Environment Variable Management
+
+For managing environment variables (API URLs, keys, etc.) across different environments (dev, staging, prod), we use `react-native-config`.
+
+- **Do not** hardcode environment variables in the codebase.
+- **Do not** commit `.env` files to source control (ensure they are in `.gitignore`).
+- Define your variables in a `.env` file at the project root for local development.
+
+```bash
+# .env example
+API_URL=https://api.codezest.dev
+```
+
+Access them in code:
+
+```typescript
+import Config from 'react-native-config';
+const apiUrl = Config.API_URL;
+```
+
+---
+
+## Device Lab Management
+
+To ensure consistent testing across the team, adhere to the following device management strategy:
+
+- **Primary iOS Simulator:** iPhone 14 (or latest SE for minimum viewport testing).
+- **Primary Android Emulator:** Pixel 7 API 37 (Medium Phone).
+- **Physical Device Testing:** Mandatory before any major release. Ensure the app is tested on a low-to-mid range Android device to verify performance and animation smoothness.
+
+---
+
+## CI/CD Pipeline Configuration
+
+Our automated release and testing pipeline uses **GitHub Actions** and **Fastlane**.
+
+### GitHub Actions (Continuous Integration)
+
+On every Pull Request to `main`, the CI pipeline runs:
+
+1. **Linting:** `npm run lint` (ESLint + accessibility audits).
+2. **Type Checking:** `npm run type-check` (TypeScript).
+3. **Unit Tests:** `npm test` (Jest).
+
+### Fastlane (Continuous Delivery)
+
+Fastlane is used to automate beta distributions and App Store/Play Store releases.
+
+- **iOS:** Fastlane handles certificate management (match), builds the `.ipa`, and uploads to TestFlight.
+- **Android:** Fastlane builds the `.aab`, signs it, and uploads to the Google Play Console internal track.
+
+**To run a local release build using Fastlane (requires credentials):**
+
+```bash
+# iOS Beta Release
+cd ios && bundle exec fastlane beta
+
+# Android Beta Release
+cd android && bundle exec fastlane beta
+```

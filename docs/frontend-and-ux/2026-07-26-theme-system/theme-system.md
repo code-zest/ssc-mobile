@@ -814,3 +814,91 @@ That hub serves as the **production-ready documentation site** containing:
 - **Subject Tokens**: Visual representation of the `--subject-*` color family.
 
 If you are porting a component from the admin web or adding a new shared token, always refer to the Admin `/design-system` hub as the visual source of truth.
+
+---
+
+## 20. Advanced Implementation & Governance
+
+### Token Mapping Code Examples (NativeWind v5)
+
+When applying the OKLCH design tokens using NativeWind v5, map the CSS variables to Tailwind utilities.
+
+```tsx
+// Example: Using the `--primary` and `--card` tokens
+export function PrimaryCard({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="bg-card text-card-foreground border-border rounded-xl p-4 shadow-sm">
+      {children}
+      <button className="mt-4 w-full bg-primary text-primary-foreground h-11 rounded-lg flex items-center justify-center font-semibold active:opacity-80 transition-opacity">
+        Continue
+      </button>
+    </div>
+  );
+}
+```
+
+### `index.css` Configuration & Dark Mode
+
+The `@theme` block in `global.css` (or `index.css`) maps your raw OKLCH values to Tailwind utility classes. Crucially, **Dark Mode** overrides must be handled explicitly here.
+
+```css
+@import 'tailwindcss';
+@plugin "nativewind/postcss";
+
+@theme {
+  /* Light Mode (Default) */
+  --color-background: oklch(0.98 0.01 275);
+  --color-foreground: oklch(0.15 0.03 275);
+  --color-card: oklch(1 0 0);
+  --color-card-foreground: oklch(0.15 0.03 275);
+  --color-primary: oklch(0.55 0.2 275);
+  --color-primary-foreground: oklch(0.98 0.01 275);
+  --color-border: oklch(0.9 0.02 275);
+
+  /* Semantic */
+  --color-correct: oklch(0.65 0.18 150);
+  --color-incorrect: oklch(0.58 0.2 25);
+}
+
+/* Dark Mode Overrides */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-background: oklch(0.15 0.03 275);
+    --color-foreground: oklch(0.98 0.01 275);
+    --color-card: oklch(0.2 0.03 275);
+    --color-card-foreground: oklch(0.98 0.01 275);
+    --color-border: oklch(0.3 0.03 275);
+    /* Primary color is slightly desaturated in dark mode for accessibility */
+    --color-primary: oklch(0.65 0.18 275);
+  }
+}
+```
+
+### Integration Guide
+
+1. **Define Tokens:** Place your OKLCH tokens in `global.css` under the `@theme` directive.
+2. **Handle Dark Mode:** Use `@media (prefers-color-scheme: dark)` to override the variables on `:root`. NativeWind v5 will pick this up automatically.
+3. **Consume:** Use the standard Tailwind classes (e.g., `bg-primary`, `text-foreground`) in your `.tsx` components. NativeWind will resolve these to the correct color based on the active color scheme.
+
+### Design Token Governance
+
+Any changes to the design tokens (adding a new semantic color, altering the scale) must follow this governance process:
+
+1. **Proposal:** Create a PR modifying `global.css`.
+2. **Review:** The PR must be reviewed and approved by **CVS CHARAN** (Lead).
+3. **Validation:** The PR description must include a screenshot of the Admin `/design-system` hub showing the new token passing WCAG AA contrast checks in both light and dark mode.
+
+### Performance Budgets
+
+To maintain a snappy mobile experience, adhere to these budgets:
+
+- **Animations:** No animation should exceed `600ms`. Stick to `150ms-300ms` for interactions.
+- **Render Complexity:** Avoid deeply nested `View` components just for styling. Use `gap` and flexbox padding efficiently.
+
+### Automated Accessibility Testing
+
+To catch accessibility regressions early, we integrate `axe-react-native` into our CI.
+
+1. Install: `npm install --save-dev axe-react-native`
+2. Add a test file `__tests__/a11y.test.tsx` that renders core components (like the MCQ Option) and runs `axe()` on them.
+3. The GitHub Actions CI pipeline runs `npm test`, which will fail if a contrast ratio drops below WCAG AA (4.5:1).

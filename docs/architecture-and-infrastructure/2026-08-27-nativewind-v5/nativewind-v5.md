@@ -63,3 +63,49 @@ In v5, custom theme configuration lives in `global.css` using `@theme` blocks (n
 | `metro.config.js`    | Removed `{ input: './global.css' }` argument   |
 | `postcss.config.mjs` | **New** — PostCSS config for Tailwind v4       |
 | `tailwind.config.js` | **Deleted** — replaced by CSS-first config     |
+
+## Build Optimization Tips
+
+To maximize build performance in React Native with NativeWind v5:
+
+- **Metro Caching Strategy:** Ensure Metro cache is cleared only when native dependencies or Tailwind configs change (`npm start -- --reset-cache`). Utilize CI caching for `~/.metro` directory.
+- **TurboPack Considerations:** NativeWind v5 sets the foundation for future TurboPack compatibility by decoupling from Babel. Ensure you keep `@tailwindcss/postcss` updated.
+- **Component Caching:** For complex dynamic styles, memoize the style array using `useMemo` to prevent unnecessary stylesheet recalculations during re-renders.
+
+## Performance Guidelines
+
+When styling a large React Native project:
+
+- **Avoid dynamic template literals:** Write full class names (`bg-primary` instead of `bg-${color}`). NativeWind extracts static classes at build time.
+- **Limit string interpolations:** Passing large, dynamic string templates directly into the `className` prop can cause runtime overhead. Use libraries like `clsx` or `tailwind-merge` thoughtfully.
+- **Beware of overly complex classes:** Instead of passing 20+ utility classes inline for a deeply nested component, consider using a custom component to encapsulate the styling or extracting it via `@apply` in `global.css` if it's reused heavily across the app.
+
+## TypeScript Configuration
+
+To enable Tailwind CSS IntelliSense class completion in the IDE with NativeWind v5 and Tailwind v4:
+
+1. Ensure the **Tailwind CSS IntelliSense** VSCode extension is installed.
+2. In your VSCode `settings.json`, add support for custom regex if you use `cva` or utility functions like `cn`:
+   ```json
+   "tailwindCSS.experimental.classRegex": [
+     ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+     ["cn\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]
+   ]
+   ```
+3. Create a `env.d.ts` at your project root to declare nativewind module definitions if you encounter type errors with `className` on React Native primitives:
+   ```typescript
+   /// <reference types="nativewind/types" />
+   ```
+
+## Troubleshooting v5 Migration
+
+If you encounter issues during the migration or development:
+
+- **Missing styles after changes:**
+  - _Symptom:_ Newly added Tailwind classes do not apply.
+  - _Fix:_ Clear the Metro bundler cache (`npm start -- --reset-cache`).
+- **Tailwind class does not exist:**
+  - _Symptom:_ `Unknown class` warning in logs.
+  - _Fix:_ Tailwind v4 drops some legacy v3 classes. Verify the class exists in the Tailwind v4 documentation.
+- **Log Analysis Patterns:**
+  - Look for PostCSS compilation warnings in the Metro terminal output. NativeWind v5 pushes styling errors to the PostCSS layer rather than Babel.
